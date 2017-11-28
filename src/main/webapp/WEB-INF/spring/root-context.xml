@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+		 <property name="url" value="jdbc:oracle:thin:@38.105.211.209:1521:crbdb" />
+        <property name="username" value="SMILEBD" />
+        <property name="password" value="dhanm0ndi" />      
+	</bean>
+ 
+ 
+ <!--  
+    <bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+		 <property name="url" value="jdbc:oracle:thin:@192.168.151.100:1521:smiledb" />
+        <property name="username" value="smilebd" />
+        <property name="password" value="SecrEt4eyE" />
+	</bean>
+-->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+			 	<!--   <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>com.maestro.smilebdcp.beans.PHONES</value>
+				<value>com.maestro.smilebdcp.beans.SUBSCRIBER_PAYMENT</value>
+				<value>com.maestro.smilebdcp.beans.CONNECTION_CATAGORY</value>
+				<value>com.maestro.smilebdcp.beans.PAYMENT</value>
+				<value>com.maestro.smilebdcp.beans.DBBL_TEMP_TRANS</value>
+				<value>com.maestro.smilebdcp.beans.DBBL_TRANS_LOG</value>
+				<value>com.maestro.smilebdcp.beans.SMS_OUTBOX</value>
+				<value>com.maestro.smilebdcp.beans.DBBL_RESULT_CODE</value>    
+				
+			</list>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="customerDao" class="com.maestro.smilebdcp.dao.CustomerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="customerService" class="com.maestro.smilebdcp.services.CustomerServiceImpl">
+		<property name="customerDao" ref="customerDao"></property>
+	</bean>
+
+</beans>
